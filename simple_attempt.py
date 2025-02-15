@@ -54,6 +54,19 @@ for credit_tuple in interests:
 
 heapq.heapify(interests)
 #The credit card with the upcoming due date will be the payment that should be prioritized
-while len(interests) > 0:
-    print(heapq.heappop(interests))
-#Now, we will have to substract it from the remaining
+while len(interests) > 0: 
+    print(interests)
+    #Now, we will have to substract it from the remaining
+    card_information =  heapq.heappop(interests)
+    #See whether we can pay the interest or the statement balance
+    print(card_information)
+    min_choice = min(card_information[-2:]) if card_information[-1] > hard_stop else card_information[-1]
+    if min_choice > hard_stop:
+        break
+    else:
+        hard_stop -= min_choice
+        print(hard_stop)
+        #After we pay each card, we need to update the balance on that card
+        
+#In this case, there is leftover money - we can ask the user where to use this money
+    
