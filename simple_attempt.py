@@ -1,5 +1,6 @@
 #Calculate the non-negotiables
 import datetime
+import heapq
 sample_prices = [516, 450, 320, 330]
 non_negotiables = sum(sample_prices)
 todays_date = datetime.datetime.now()
@@ -37,8 +38,23 @@ credit_cards = {
 }
 
 #Now, we will calculate the potential interest each card can yield
-interests = [(values[0] + (values[0] * ((values[1] / 100) / 365) * 30), keys)  for keys, values in credit_cards.items()]
+interests = [[keys, values[0] + (values[0] * ((values[1] / 100) / 365) * 30)] for keys, values in credit_cards.items()]
+
+#We will have to prioritize which card to prioritize based on the due date, relative to today
+#Now we need to access the dictionary and get the due date
+for credit_tuple in interests:
+    #Get the credit card
+    credit_ID = credit_tuple[0]
+    #Get the date object 
+    date_object = credit_cards[credit_ID][2]
+    #Calculate the difference
+    days = (date_object - todays_date).days
+    credit_tuple.insert(0, days)
+
+heapq.heapify(interests)
+smallest = heapq.heappop(interests)
+#The credit card with the upcoming due date will be the payment that should be prioritized
+print(smallest)
 print(interests)
-
-#We will have to prioritize which card to prioritize based on amount and the due date
-
+while len(interests) > 0:
+    print(heapq.heappop(interests))
